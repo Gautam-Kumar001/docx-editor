@@ -1,35 +1,10 @@
-// import React from "react";
-// import {
-//   DocumentEditorComponent,
-//   DocumentEditorContainerComponent,
-//   Toolbar,
-// } from "@syncfusion/ej2-react-documenteditor";
-
-// DocumentEditorContainerComponent.Inject(Toolbar);
-
-// class DocEditor extends React.Component {
-//   render() {
-//     return (
-//       <div className="doc-editor">
-//         <DocumentEditorContainerComponent
-//           id="container"
-//           height={"100vh"}
-//           width={"100%"}
-//           serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
-//           enableToolbar={true}
-//         />
-//       </div>
-//     );
-//   }
-// }
-
-// export default DocEditor;
-
 import React from "react";
 import {
   DocumentEditorContainerComponent,
   Toolbar,
 } from "@syncfusion/ej2-react-documenteditor";
+
+import Header from "../header/header.component";
 
 import "./doc-editor.styles.scss";
 
@@ -39,7 +14,7 @@ class DocEditor extends React.Component {
   onCreate() {
     setInterval(() => {
       this.updateDocumentEditorSize();
-    }, 1);
+    }, 100);
     //Adds event listener for browser window resize event.
     window.addEventListener("resize", this.onWindowResize.bind(this));
   }
@@ -51,20 +26,76 @@ class DocEditor extends React.Component {
 
   updateDocumentEditorSize() {
     //Resizes the document editor component to fit full browser window.
-    this.container.resize(window.innerWidth - 23, window.innerHeight);
+    this.container.resize(window.innerWidth - 23, window.innerHeight - 36);
   }
 
+  onToolbarClick = (args) => {
+    switch (args.item.id) {
+      case "Custom":
+        //Disable image toolbar item.
+        this.container.toolbar.enableItems(4, false);
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
+    // let toolItem = {
+    //   prefixIcon: "e-de-ctnr-lock",
+    //   tooltipText: "Disable Image",
+    //   text: "Disable Image",
+    //   id: "Custom",
+    // };
+
+    let items = [
+      // toolItem,
+      "New",
+      "Open",
+      "Separator",
+      "Undo",
+      "Redo",
+      "Separator",
+      "Image",
+      "Table",
+      "Hyperlink",
+      "Bookmark",
+      "TableOfContents",
+      "Separator",
+      "Header",
+      "Footer",
+      "PageSetup",
+      "PageNumber",
+      "Break",
+      "InsertFootnote",
+      "InsertEndnote",
+      "Separator",
+      "Find",
+      "Separator",
+      "Comments",
+      "TrackChanges",
+      // "Separator",
+      // "LocalClipboard",
+      // "RestrictEditing",
+      // "FormFields",
+      // "UpdateFields",
+    ];
+
     return (
-      <DocumentEditorContainerComponent
-        id="container"
-        ref={(scope) => {
-          this.container = scope;
-        }}
-        serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
-        enableToolbar={true}
-        created={this.onCreate.bind(this)}
-      />
+      <div className="doc-editor">
+        <Header />
+        <DocumentEditorContainerComponent
+          id="container"
+          ref={(scope) => {
+            this.container = scope;
+          }}
+          serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
+          enableToolbar={true}
+          toolbarItems={items}
+          toolbarClick={this.onToolbarClick.bind(this)}
+          created={this.onCreate.bind(this)}
+        />
+      </div>
     );
   }
 }
