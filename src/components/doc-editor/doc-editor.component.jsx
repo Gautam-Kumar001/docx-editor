@@ -2,13 +2,23 @@ import React from "react";
 import {
   DocumentEditorContainerComponent,
   Toolbar,
+  WordExport,
+  SfdtExport,
+  Selection,
+  Editor,
 } from "@syncfusion/ej2-react-documenteditor";
 
 import Header from "../header/header.component";
 
 import "./doc-editor.styles.scss";
 
-DocumentEditorContainerComponent.Inject(Toolbar);
+DocumentEditorContainerComponent.Inject(
+  Toolbar,
+  SfdtExport,
+  Selection,
+  Editor,
+  WordExport
+);
 
 class DocEditor extends React.Component {
   onCreate() {
@@ -26,19 +36,24 @@ class DocEditor extends React.Component {
 
   updateDocumentEditorSize() {
     //Resizes the document editor component to fit full browser window.
-    this.container.resize(window.innerWidth - 23, window.innerHeight - 36);
+    this.container.resize(window.innerWidth - 15, window.innerHeight - 57);
   }
 
-  onToolbarClick = (args) => {
-    switch (args.item.id) {
-      case "Custom":
-        //Disable image toolbar item.
-        this.container.toolbar.enableItems(4, false);
-        break;
-      default:
-        break;
-    }
-  };
+  // onToolbarClick = (args) => {
+  //   switch (args.item.id) {
+  //     case "Custom":
+  //       //Disable image toolbar item.
+  //       this.container.toolbar.enableItems(4, false);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  save() {
+    //Download the document in docx format.
+    this.documenteditor.save("sample", "Docx");
+  }
 
   render() {
     // let toolItem = {
@@ -92,9 +107,15 @@ class DocEditor extends React.Component {
           serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
           enableToolbar={true}
           toolbarItems={items}
-          toolbarClick={this.onToolbarClick.bind(this)}
+          isReadOnly={false}
+          enableSelection={true}
+          enableEditor={true}
+          enableSfdtExport={true}
+          enableWordExport={true}
+          // toolbarClick={this.onToolbarClick.bind(this)}
           created={this.onCreate.bind(this)}
         />
+        <button onClick={this.save.bind(this)}>Submit</button>
       </div>
     );
   }
