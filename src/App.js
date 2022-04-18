@@ -1,5 +1,4 @@
 import DocEditor from "./components/doc-editor/doc-editor.component";
-
 import "./App.scss";
 
 function App() {
